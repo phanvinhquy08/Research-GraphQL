@@ -1,37 +1,41 @@
-import React, { useState } from 'react'
-import { useQuery } from '@apollo/client';
-import { getBooksQuery } from '../queries/queries';
-import BookDetail from './BookDetail';
+import React, { useState } from "react";
+import { useQuery, useLazyQuery } from "@apollo/client";
+import { getBooksQuery, getBookQuery } from "../queries/queries";
+import BookDetail from "./BookDetail";
 
+const BookList = (props) => {
+  const { loading, error, data } = useQuery(getBooksQuery, {
+    displayName: "QUY",
+  });
 
-const BookList = props => {
-    const [id, setId] = useState(null);
-    const { loading, error, data } = useQuery(getBooksQuery);
-    const displayBook = (params) => {
-        if (loading) {
-            return (
-                <div>Loading...</div>
-            )
-        }
-        if (error) {
-            return (
-                <div>Error!</div>
-            )
-        }
-        return data.books.map(item => (
-            <li onClick={() => setId(item.id)} key={item.id}>{item.name}</li>
-        ))
+  const [getBook, result] = useLazyQuery(getBookQuery, {
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: "network-only",
+    onCompleted: (data) => console.log(data),
+  });
+
+  const displayBook = (params) => {
+    if (loading) {
+      return <div>Loading...</div>;
     }
 
-    return (
-        <div>
-            <ul id="book-list">
-                {displayBook()}
-            </ul>
-            <BookDetail id={id}/>
-        </div>
-    )
+    if (error) {
+      return <div>Error!</div>;
+    }
 
-}
+    return data.books.map((item) => (
+      <li onClick={() => getBook({ variables: { id: item.id } })} key={item.id}>
+        {item.name}
+      </li>
+    ));
+  };
 
-export default BookList
+  return (
+    <div>
+      <ul id="book-list">{displayBook()}</ul>
+      <BookDetail result={result} />
+    </div>
+  );
+};
+
+export default BookList;
