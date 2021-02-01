@@ -17,3 +17,8 @@
 3. Fragment
 
 - When get the source of project, should see the list of fragments they use, and check the package.json script to generate type or fragments
+
+4. client, cache methods
+
+- readQuery: run query in local cache, return object data : {[field] : any}
+- readFragment: return {}
