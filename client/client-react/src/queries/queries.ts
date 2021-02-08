@@ -59,10 +59,20 @@ const editBookMutation = gql`
   ${BookList.fragments.books}
 `;
 
+const deleteBookQuery = gql`
+  mutation DeleteBook($id: ID!) {
+    deleteBook(id: $id) {
+      ...BookFragment
+    }
+  }
+  ${BookList.fragments.books}
+`; 
+
 export {
   getAuthorQuery,
   getBooksQuery,
   addBookMutation,
   getBookQuery,
   editBookMutation,
+  deleteBookQuery
 };

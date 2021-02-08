@@ -10,6 +10,7 @@ import {
   addBookMutation,
   getBooksQuery,
 } from "../queries/queries";
+import BookList from "./BookList";
 
 interface AuthorData {
   authors: Author[];
@@ -62,20 +63,26 @@ const BookForm: React.FC<Props> & Fragments = ({
 
         const mutationResult = result.data;
         const data = cache.readQuery<BooksData>({ query: getBooksQuery });
-        cache.writeQuery({
+        const ref = cache.writeQuery({
           query: getBooksQuery,
           data: { books: [...data!.books, mutationResult!.addBook] },
         });
-
+        console.log(ref);
         // CACHE MODIFY
 
         // cache.modify({
+        //   // id: cache.identify(),
         //   fields: {
         //     books: (existingBooksRef = [], { readField }) => {
-
-        //     }
-        //   }
-        // })
+        //       const newBookRef = cache.writeFragment({
+        //         fragment: BookList.fragments.books,
+        //         data: result.data?.addBook,
+        //       });
+        //       console.log(existingBooksRef, newBookRef);
+        //       return [...existingBooksRef, newBookRef];
+        //     },
+        //   },
+        // });
       },
     }
   );
@@ -111,22 +118,22 @@ const BookForm: React.FC<Props> & Fragments = ({
     <div>
       <Form form={form} labelCol={{ span: 4 }} onFinish={onSubmit}>
         <Form.Item
-          name='book'
-          label='Book name'
+          name="book"
+          label="Book name"
           rules={[{ required: true, message: "Please input book name" }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          name='gerne'
-          label='Gerne'
+          name="gerne"
+          label="Gerne"
           rules={[{ required: true, message: "Please input gerne" }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          name='author'
-          label='Author'
+          name="author"
+          label="Author"
           rules={[{ required: true, message: "Please choose author" }]}
         >
           <Select>
@@ -141,8 +148,8 @@ const BookForm: React.FC<Props> & Fragments = ({
           <Col span={4}></Col>
           <Col span={20}>
             <Button
-              htmlType='submit'
-              type='primary'
+              htmlType="submit"
+              type="primary"
               loading={editLoading || addLoading}
             >
               {isEmpty(initialValues) ? "Add book" : "Edit Book"}

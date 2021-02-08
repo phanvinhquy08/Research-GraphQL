@@ -13,26 +13,26 @@ const BookDetail: React.FC<Props> = ({ result }) => {
 
   return (
     <Skeleton loading={loading || networkStatus === NetworkStatus.refetch}>
-      {data ? (
+      {data?.book ? (
         <Descriptions
-          layout='horizontal'
+          layout="horizontal"
           bordered
           extra={
-            <Button type='primary' onClick={() => refetch && refetch()}>
+            <Button type="primary" onClick={() => refetch && refetch()}>
               Refetch
             </Button>
           }
         >
-          <Descriptions.Item label='id' span={3}>
+          <Descriptions.Item label="id" span={3}>
             {data?.book.id}
           </Descriptions.Item>
-          <Descriptions.Item label='name' span={3}>
+          <Descriptions.Item label="name" span={3}>
             {data?.book.name}
           </Descriptions.Item>
-          <Descriptions.Item label='genre' span={3}>
+          <Descriptions.Item label="genre" span={3}>
             {data?.book.genre}
           </Descriptions.Item>
-          <Descriptions.Item label='author' span={3}>
+          <Descriptions.Item label="author" span={3}>
             {data?.book.author.name}
           </Descriptions.Item>
         </Descriptions>
